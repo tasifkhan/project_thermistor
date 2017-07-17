@@ -18,6 +18,7 @@ double readings[16];
 
 void setup() 
 {
+  Serial.begin(9600);
   // Set up the select pins, as outputs
   for (int i=0; i<3; i++)
   {
@@ -30,6 +31,7 @@ void setup()
  
 void loop() 
 {
+
    for (int pin=0; pin<=15; pin++)
   {
     selectMuxPin(pin); // selects a pin    
@@ -40,9 +42,9 @@ void loop()
     double T = 1/Tinverse;
     readings[pin] = T;
 
-    time = millis();
-    Serial.print(time);
-    Serial.print("\t"); 
+//    time = millis();
+//    Serial.print(time);
+//    Serial.print("\t"); 
     Serial.println(readings[pin], DEC);
   }    
 }
