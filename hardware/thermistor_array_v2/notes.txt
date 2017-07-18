@@ -1,0 +1,5 @@
+resistors
+
+.964 MOhm
+.985 MOhm
+1.014 MOhm
