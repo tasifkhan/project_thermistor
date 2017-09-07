@@ -26,12 +26,20 @@ byte controlPins[] = {
 // store adc values here   
 float v0[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // voltage reading 
 float v1[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // voltage reading               
-float muxValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // resistance 
+int muxValues[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // resistance 
 float muxValues1[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}; // resistance
 float dummy[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,};
+char printTime[10];
+
+String convert(int data) {
+  float v0=3.3*(data/1024.0); // v0
+  float res =((.964*v0)/(3.3)) / (1-(v0/3.3)); // (r0*(v0/3.3))/(1-(v0/3.3)) = rx
+  return String(res, 4);
+}
+
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(45, OUTPUT); // A3
   pinMode(47, OUTPUT); // A2
   pinMode(49, OUTPUT); // A1
@@ -48,20 +56,23 @@ void displayData()
   
   for (int i = 0; i < 16; i++)
   {
-    Serial.print(globalTime); // time
+    globalTime = int(millis() / 1000);
+    char printTime[10];
+    sprintf(printTime, "%06d", globalTime);
+    Serial.print(printTime);
     Serial.print(' ');
-    Serial.print(i); // pixelID 
+    //Serial.print(i); // pixelID 
     Serial.print(' '); 
-    Serial.print(muxValues[i]); // resistance
-    Serial.print(' '); 
-    Serial.println(muxValues1[i]); // resistance
+    Serial.print(convert(muxValues[i])); // resistance
+    //Serial.print(' '); 
+    //Serial.print(muxValues1[i]); // resistance
   }
-  //Serial.println("========================");  
+  Serial.println('\r');  
 }
  
 void loop()
 {
-  globalTime = int(millis() / 1000);
+  
   
   for (int i = 0; i < 16; i++) // reading one channel at a time
   {
@@ -82,9 +93,10 @@ void loop()
       dummy[j]= analogRead(A0);
       delay(10);
     }
-    v0[i]=3.3*(analogRead(A0)/1024.0); // v0
-    muxValues[i]=((.964*v0[i])/(3.3)) / (1-(v0[i]/3.3)); // (r0*(v0/3.3))/(1-(v0/3.3)) = rx
-    delay(50);
+    //v0[i]=3.3*(analogRead(A0)/1024.0); // v0
+    //muxValues[i]=((.964*v0[i])/(3.3)) / (1-(v0[i]/3.3)); // (r0*(v0/3.3))/(1-(v0/3.3)) = rx
+    muxValues[i] = analogRead(A0);
+    delay(10);
 
     // dummy reads otherwise the adc goes all over the places - v1
     for (int j = 0; j < 5; j++){
@@ -97,6 +109,7 @@ void loop()
   }
  
   // display captured data
+  
   displayData();
   delay(10); 
 }
