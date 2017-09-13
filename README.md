@@ -1,4 +1,4 @@
-# project_thermistor
+## project_thermistor
 - Stream, visualize, and save 16 channel thermistor data using arduino due.
 - Thermistor array is connected to the 32 pin .5 mm pitch FFC connector.
 Those connections goes to the analog switch, and to the bridge circuit.
@@ -12,5 +12,6 @@ Those connections goes to the analog switch, and to the bridge circuit.
 | A2      |47            |
 | A3      |45            |
 
-## notes
+### notes
+- 2017_09_13 added ipython real time temperature mapping
 - 2017_08_27 checked both hardware and firmware, correctly outputting resistance values.
